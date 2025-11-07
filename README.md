@@ -5,11 +5,13 @@ A Python web service scaffold ready for deployment to Render.
 ## Features
 
 - Flask web framework
+- PostgreSQL database integration with connection pooling
 - Health check endpoint for Render monitoring
 - Environment variable configuration
 - Error handling
 - Render deployment configuration
 - Gunicorn WSGI server for production
+- RESTful API endpoints for database operations
 
 ## Local Development
 
@@ -28,6 +30,7 @@ pip install -r requirements.txt
 ```bash
 PORT=5000
 ENV=development
+DATABASE_URL=postgresql://techstack_4vkf_user:E3YrawtrX14MgEJinDqr0qwtuo6iWWDC@dpg-d3eo5jadbo4c73bgtrfg-a/techstack_4vkf
 ```
 
 4. Run the development server:
@@ -44,9 +47,17 @@ The server will run on `http://localhost:5000`
 
 ## API Endpoints
 
+### General
 - `GET /` - Welcome message
 - `GET /health` - Health check endpoint (used by Render)
 - `GET /api/status` - API status information
+
+### Database
+- `GET /api/db/test` - Test database connection
+- `GET /api/entries` - Get all entries (limit 100)
+- `POST /api/entries` - Create a new entry
+  - Body: `{"title": "Entry Title", "content": "Entry content"}`
+- `GET /api/entries/<id>` - Get a specific entry by ID
 
 ## Deployment to Render
 
@@ -78,9 +89,10 @@ Create a `.env` file for local development:
 ```
 PORT=5000
 ENV=development
+DATABASE_URL=postgresql://techstack_4vkf_user:E3YrawtrX14MgEJinDqr0qwtuo6iWWDC@dpg-d3eo5jadbo4c73bgtrfg-a/techstack_4vkf
 ```
 
-For Render, add environment variables in the Render dashboard or in `render.yaml`.
+For Render, the `DATABASE_URL` is configured in `render.yaml`. You can override it in the Render dashboard if needed.
 
 ## Project Structure
 
@@ -88,6 +100,7 @@ For Render, add environment variables in the Render dashboard or in `render.yaml
 .
 ├── app.py            # Main Flask application
 ├── config.py         # Configuration settings
+├── db.py             # Database connection and utilities
 ├── requirements.txt  # Python dependencies
 ├── render.yaml       # Render deployment configuration
 ├── runtime.txt       # Python version for Render
@@ -101,4 +114,15 @@ For Render, add environment variables in the Render dashboard or in `render.yaml
 - Python 3.11+
 - Flask 3.0.0
 - Gunicorn (for production deployment)
+- PostgreSQL database (configured on Render)
+- psycopg2-binary (PostgreSQL adapter)
+
+## Database
+
+The application uses PostgreSQL with connection pooling for efficient database operations. The database automatically creates an `entries` table on first startup with the following schema:
+
+- `id` - Serial primary key
+- `title` - VARCHAR(255)
+- `content` - TEXT
+- `created_at` - TIMESTAMP (auto-generated)
 

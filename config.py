@@ -10,7 +10,9 @@ class Config:
     ENV = os.environ.get('ENV', 'development')
     DEBUG = ENV == 'development'
     
-    # Add your configuration variables here
-    # DATABASE_URL = os.environ.get('DATABASE_URL')
-    # API_KEY = os.environ.get('API_KEY')
+    # Database configuration
+    DATABASE_URL = os.environ.get(
+        'DATABASE_URL',
+        'postgresql://techstack_4vkf_user:E3YrawtrX14MgEJinDqr0qwtuo6iWWDC@dpg-d3eo5jadbo4c73bgtrfg-a/techstack_4vkf'
+    )
 

@@ -9,9 +9,9 @@ services:
     envVars:
       - key: ENV
         value: production
-      # Add your environment variables here
-      # - key: DATABASE_URL
-      #   value: your-database-url
+      - key: DATABASE_URL
+        value: postgresql://techstack_4vkf_user:E3YrawtrX14MgEJinDqr0qwtuo6iWWDC@dpg-d3eo5jadbo4c73bgtrfg-a/techstack_4vkf
+      # Add additional environment variables here
       # - key: API_KEY
       #   sync: false  # Set this in Render dashboard for sensitive values
 
