@@ -12,6 +12,7 @@ A Python web service scaffold ready for deployment to Render.
 - Render deployment configuration
 - Gunicorn WSGI server for production
 - RESTful API endpoints for database operations
+- Scheduled cron job (runs every 24 hours)
 
 ## Local Development
 
@@ -101,6 +102,7 @@ For Render, the `DATABASE_URL` is configured in `render.yaml`. You can override 
 ├── app.py            # Main Flask application
 ├── config.py         # Configuration settings
 ├── db.py             # Database connection and utilities
+├── cron_job.py       # Scheduled cron job script
 ├── requirements.txt  # Python dependencies
 ├── render.yaml       # Render deployment configuration
 ├── runtime.txt       # Python version for Render
@@ -125,4 +127,32 @@ The application uses PostgreSQL with connection pooling for efficient database o
 - `title` - VARCHAR(255)
 - `content` - TEXT
 - `created_at` - TIMESTAMP (auto-generated)
+
+## Cron Job
+
+The application includes a scheduled cron job that runs every 24 hours at midnight UTC. The cron job is configured in `render.yaml` and performs:
+
+- Database cleanup (removes entries older than 30 days)
+- Database statistics collection
+- Custom maintenance tasks (customize in `cron_job.py`)
+
+### Cron Job Schedule
+
+The cron job runs on the schedule defined in `render.yaml`:
+- **Schedule**: `0 0 * * *` (every day at midnight UTC)
+- **Command**: `python cron_job.py`
+
+You can customize the cron job schedule using standard cron syntax:
+- `0 0 * * *` - Every day at midnight
+- `0 */6 * * *` - Every 6 hours
+- `0 0 * * 0` - Every Sunday at midnight
+
+### Local Testing
+
+To test the cron job locally:
+```bash
+python cron_job.py
+```
+
+The cron job will connect to your database and execute the scheduled tasks.
 
