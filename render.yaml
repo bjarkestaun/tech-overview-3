@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: tech-overview-3
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    healthCheckPath: /health
+    envVars:
+      - key: ENV
+        value: production
+      # Add your environment variables here
+      # - key: DATABASE_URL
+      #   value: your-database-url
+      # - key: API_KEY
+      #   sync: false  # Set this in Render dashboard for sensitive values
+
