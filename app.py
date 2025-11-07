@@ -2,6 +2,7 @@ from datetime import datetime
 from flask import Flask, jsonify, request
 from config import Config
 from db import db, init_db
+from cron_job import run_cron_job
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -131,6 +132,29 @@ def get_entry(entry_id):
         return jsonify({
             'error': 'Database error',
             'message': str(e)
+        }), 500
+
+@app.route('/api/cron/run', methods=['POST', 'GET'])
+def run_cron():
+    """Manually trigger the cron job"""
+    try:
+        result = run_cron_job()
+        
+        if result['success']:
+            return jsonify({
+                'message': 'Cron job executed successfully',
+                'result': result
+            }), 200
+        else:
+            return jsonify({
+                'message': 'Cron job executed with errors',
+                'result': result
+            }), 200
+    except Exception as e:
+        return jsonify({
+            'error': 'Failed to execute cron job',
+            'message': str(e),
+            'timestamp': datetime.now().isoformat()
         }), 500
 
 @app.errorhandler(404)

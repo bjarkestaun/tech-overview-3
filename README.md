@@ -60,6 +60,10 @@ The server will run on `http://localhost:5000`
   - Body: `{"title": "Entry Title", "content": "Entry content"}`
 - `GET /api/entries/<id>` - Get a specific entry by ID
 
+### Cron Job
+- `GET /api/cron/run` - Manually trigger the cron job
+- `POST /api/cron/run` - Manually trigger the cron job (same as GET)
+
 ## Deployment to Render
 
 ### Option 1: Using render.yaml (Recommended)
