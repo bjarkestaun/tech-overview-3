@@ -125,20 +125,28 @@ For Render, the `DATABASE_URL` is configured in `render.yaml`. You can override 
 
 ## Database
 
-The application uses PostgreSQL with connection pooling for efficient database operations. The database automatically creates an `entries` table on first startup with the following schema:
+The application uses PostgreSQL with connection pooling for efficient database operations. The database automatically creates the following tables on first startup:
 
+### entries table (for API)
 - `id` - Serial primary key
 - `title` - VARCHAR(255)
 - `content` - TEXT
 - `created_at` - TIMESTAMP (auto-generated)
 
+### test_db table (for cron job)
+- `id` - Serial primary key
+- `sequence_number` - INTEGER (sequential number for each cron run)
+- `run_timestamp` - TIMESTAMP (when the cron job executed)
+
 ## Cron Job
 
 The application includes a scheduled cron job that runs every 24 hours at midnight UTC. The cron job is configured in `render.yaml` and performs:
 
-- Database cleanup (removes entries older than 30 days)
-- Database statistics collection
-- Custom maintenance tasks (customize in `cron_job.py`)
+- Adds an entry to the `test_db` table with a sequential number and timestamp
+- Each entry contains:
+  - `sequence_number`: Sequential number (increments with each run)
+  - `run_timestamp`: Timestamp of when the cron job executed
+- Tracks total entries in the `test_db` table
 
 ### Cron Job Schedule
 

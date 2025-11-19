@@ -93,8 +93,8 @@ db = Database()
 
 def init_db():
     """Initialize database tables if they don't exist."""
-    # Example: Create a simple table for testing
-    create_table_query = """
+    # Create entries table for the API
+    create_entries_table = """
     CREATE TABLE IF NOT EXISTS entries (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
@@ -103,8 +103,18 @@ def init_db():
     );
     """
     
+    # Create test_db table for cron job entries
+    create_test_db_table = """
+    CREATE TABLE IF NOT EXISTS test_db (
+        id SERIAL PRIMARY KEY,
+        sequence_number INTEGER NOT NULL,
+        run_timestamp TIMESTAMP NOT NULL
+    );
+    """
+    
     try:
-        db.execute_query(create_table_query)
+        db.execute_query(create_entries_table)
+        db.execute_query(create_test_db_table)
         print("Database tables initialized successfully")
     except Exception as error:
         print(f"Error initializing database: {error}")
