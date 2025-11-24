@@ -63,6 +63,7 @@ The server will run on `http://localhost:5000`
 ### Cron Job
 - `GET /api/cron/run` - Manually trigger the cron job
 - `POST /api/cron/run` - Manually trigger the cron job (same as GET)
+- `GET /api/test_db` - Get all entries from the test_db table
 
 ## Deployment to Render
 

@@ -157,6 +157,32 @@ def run_cron():
             'timestamp': datetime.now().isoformat()
         }), 500
 
+@app.route('/api/test_db', methods=['GET'])
+def get_test_db():
+    """Get all entries from the test_db table"""
+    try:
+        query = "SELECT * FROM test_db ORDER BY sequence_number ASC;"
+        results = db.execute_query(query)
+        if results is not None:
+            # Convert RealDictRow to dict for JSON serialization
+            entries = [dict(row) for row in results]
+            return jsonify({
+                'entries': entries,
+                'count': len(entries),
+                'table': 'test_db'
+            }), 200
+        else:
+            return jsonify({
+                'entries': [],
+                'count': 0,
+                'table': 'test_db'
+            }), 200
+    except Exception as e:
+        return jsonify({
+            'error': 'Database error',
+            'message': str(e)
+        }), 500
+
 @app.errorhandler(404)
 def not_found(error):
     """404 error handler"""
