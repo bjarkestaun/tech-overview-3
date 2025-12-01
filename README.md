@@ -169,3 +169,19 @@ python cron_job.py
 
 The cron job will connect to your database and execute the scheduled tasks.
 
+### Troubleshooting Cron Job
+
+If the cron job isn't running on Render:
+
+1. **Check Render Logs**: Go to your Render dashboard → Cron Job → Logs to see execution logs
+2. **Verify Schedule**: Ensure the cron schedule `0 0 * * *` is correct (midnight UTC daily)
+3. **Test Manually**: Use the `/api/cron/run` endpoint to manually trigger the job and verify it works
+4. **Check Database Connection**: Verify the `DATABASE_URL` environment variable is set correctly in Render
+5. **View Logs**: The cron job now includes verbose logging with `flush=True` to ensure all output is captured in Render logs
+
+The cron job script has been improved with:
+- Explicit environment variable loading
+- Better error handling and logging
+- Database connection verification
+- Detailed tracebacks for debugging
+

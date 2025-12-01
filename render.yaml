@@ -21,7 +21,7 @@ services:
     plan: free
     buildCommand: pip install -r requirements.txt
     schedule: "0 0 * * *"  # Run every day at midnight UTC
-    command: python cron_job.py
+    command: python3 cron_job.py
     envVars:
       - key: ENV
         value: production
