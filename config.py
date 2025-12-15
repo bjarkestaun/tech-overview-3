@@ -10,9 +10,8 @@ class Config:
     ENV = os.environ.get('ENV', 'development')
     DEBUG = ENV == 'development'
     
-    # Database configuration
-    DATABASE_URL = os.environ.get(
-        'DATABASE_URL',
-        'postgresql://techstack_4vkf_user:E3YrawtrX14MgEJinDqr0qwtuo6iWWDC@dpg-d3eo5jadbo4c73bgtrfg-a.frankfurt-postgres.render.com/techstack_4vkf'
-    )
+    # Database configuration - must be set as environment variable
+    DATABASE_URL = os.environ.get('DATABASE_URL')
+    if not DATABASE_URL:
+        raise ValueError("DATABASE_URL environment variable is required")
 

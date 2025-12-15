@@ -31,7 +31,7 @@ pip install -r requirements.txt
 ```bash
 PORT=5000
 ENV=development
-DATABASE_URL=postgresql://techstack_4vkf_user:E3YrawtrX14MgEJinDqr0qwtuo6iWWDC@dpg-d3eo5jadbo4c73bgtrfg-a/techstack_4vkf
+DATABASE_URL=your-database-connection-string-here
 ```
 
 4. Run the development server:
@@ -89,9 +89,9 @@ The server will run on `http://localhost:5000`
    - **Build Command**: `pip install -r requirements.txt`
    - **Start Command**: `gunicorn app:app`
    - **Health Check Path**: `/health`
-5. Add environment variables:
+5. Add environment variables (see "Environment Variables" section below):
    - `ENV` = `production`
-   - `DATABASE_URL` = `postgresql://techstack_4vkf_user:E3YrawtrX14MgEJinDqr0qwtuo6iWWDC@dpg-d3eo5jadbo4c73bgtrfg-a/techstack_4vkf`
+   - `DATABASE_URL` = (get from your database service's Connect tab)
 6. Click "Create Web Service"
 
 #### Cron Job (Manual Setup - Recommended if Blueprint doesn't work):
@@ -104,22 +104,45 @@ The server will run on `http://localhost:5000`
    - **Build Command**: `pip install -r requirements.txt`
    - **Schedule**: `0 0 * * *` (every day at midnight UTC)
    - **Command**: `python3 cron_job.py`
-5. Add environment variables:
+5. Add environment variables (see "Environment Variables" section below):
    - `ENV` = `production`
-   - `DATABASE_URL` = `postgresql://techstack_4vkf_user:E3YrawtrX14MgEJinDqr0qwtuo6iWWDC@dpg-d3eo5jadbo4c73bgtrfg-a/techstack_4vkf`
+   - `DATABASE_URL` = (get from your database service's Connect tab)
 6. Click "Create Cron Job"
 7. **Important**: After creation, go to the cron job page and click "Trigger Run" to test it immediately
 
 ## Environment Variables
 
+### Local Development
+
 Create a `.env` file for local development:
 ```
 PORT=5000
 ENV=development
-DATABASE_URL=postgresql://techstack_4vkf_user:E3YrawtrX14MgEJinDqr0qwtuo6iWWDC@dpg-d3eo5jadbo4c73bgtrfg-a/techstack_4vkf
+DATABASE_URL=your-database-connection-string-here
 ```
 
-For Render, the `DATABASE_URL` is configured in `render.yaml`. You can override it in the Render dashboard if needed.
+### Render Deployment
+
+**Important**: You must set the `DATABASE_URL` environment variable in Render's dashboard:
+
+1. Go to [Render Dashboard](https://dashboard.render.com/)
+2. Navigate to your **Web Service** (`tech-overview-3`)
+3. Click on the service name
+4. Go to the **"Environment"** tab (in the left sidebar)
+5. Click **"Add Environment Variable"**
+6. Set:
+   - **Key**: `DATABASE_URL`
+   - **Value**: Your PostgreSQL connection string (get this from your database service's "Connect" tab)
+7. Click **"Save Changes"**
+
+**Repeat the same steps for your Cron Job service** (`tech-overview-3-cron`) to add the `DATABASE_URL` there as well.
+
+**To get your database connection string:**
+1. Go to your PostgreSQL database service in Render
+2. Click on the database name
+3. Go to the **"Connect"** tab
+4. Copy the **"Internal Database URL"** or **"External Database URL"**
+5. Use this as your `DATABASE_URL` value
 
 ## Project Structure
 
