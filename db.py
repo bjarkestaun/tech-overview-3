@@ -112,9 +112,21 @@ def init_db():
     );
     """
     
+    # Create links table for storing URL relationships
+    create_links_table = """
+    CREATE TABLE IF NOT EXISTS links (
+        id SERIAL PRIMARY KEY,
+        date DATE NOT NULL,
+        linking_url TEXT NOT NULL,
+        url TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    """
+    
     try:
         db.execute_query(create_entries_table)
         db.execute_query(create_test_db_table)
+        db.execute_query(create_links_table)
         print("Database tables initialized successfully")
     except Exception as error:
         print(f"Error initializing database: {error}")
