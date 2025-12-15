@@ -13,6 +13,6 @@ class Config:
     # Database configuration
     DATABASE_URL = os.environ.get(
         'DATABASE_URL',
-        'postgresql://techstack_4vkf_user:E3YrawtrX14MgEJinDqr0qwtuo6iWWDC@dpg-d3eo5jadbo4c73bgtrfg-a/techstack_4vkf'
+        'postgresql://techstack_4vkf_user:E3YrawtrX14MgEJinDqr0qwtuo6iWWDC@dpg-d3eo5jadbo4c73bgtrfg-a.frankfurt-postgres.render.com/techstack_4vkf'
     )
 

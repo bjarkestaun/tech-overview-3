@@ -75,8 +75,11 @@ The server will run on `http://localhost:5000`
 4. Connect your GitHub repository
 5. Render will automatically detect the `render.yaml` file and deploy
 
+**Note:** If the cron job doesn't appear or doesn't run after Blueprint deployment, you may need to create it manually (see Option 2 below). Some users report that cron jobs need to be created manually in the Render dashboard even when using Blueprints.
+
 ### Option 2: Manual Setup
 
+#### Web Service:
 1. Go to [Render Dashboard](https://dashboard.render.com/)
 2. Click "New +" and select "Web Service"
 3. Connect your GitHub repository
@@ -86,8 +89,26 @@ The server will run on `http://localhost:5000`
    - **Build Command**: `pip install -r requirements.txt`
    - **Start Command**: `gunicorn app:app`
    - **Health Check Path**: `/health`
-5. Add environment variables if needed
+5. Add environment variables:
+   - `ENV` = `production`
+   - `DATABASE_URL` = `postgresql://techstack_4vkf_user:E3YrawtrX14MgEJinDqr0qwtuo6iWWDC@dpg-d3eo5jadbo4c73bgtrfg-a/techstack_4vkf`
 6. Click "Create Web Service"
+
+#### Cron Job (Manual Setup - Recommended if Blueprint doesn't work):
+1. Go to [Render Dashboard](https://dashboard.render.com/)
+2. Click "New +" and select "Cron Job"
+3. Connect your GitHub repository: `tech-overview-3`
+4. Configure:
+   - **Name**: `tech-overview-3-cron`
+   - **Environment**: Python 3
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Schedule**: `0 0 * * *` (every day at midnight UTC)
+   - **Command**: `python3 cron_job.py`
+5. Add environment variables:
+   - `ENV` = `production`
+   - `DATABASE_URL` = `postgresql://techstack_4vkf_user:E3YrawtrX14MgEJinDqr0qwtuo6iWWDC@dpg-d3eo5jadbo4c73bgtrfg-a/techstack_4vkf`
+6. Click "Create Cron Job"
+7. **Important**: After creation, go to the cron job page and click "Trigger Run" to test it immediately
 
 ## Environment Variables
 
