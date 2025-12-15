@@ -274,6 +274,56 @@ def get_company_stats():
             'message': str(e)
         }), 500
 
+@app.route('/api/links/verify', methods=['GET'])
+def verify_links_table():
+    """Verify that the links table exists and show its structure"""
+    try:
+        # Check if table exists
+        table_check_query = """
+        SELECT EXISTS (
+            SELECT FROM information_schema.tables 
+            WHERE table_name = 'links'
+        );
+        """
+        table_exists = db.execute_query(table_check_query)
+        
+        if not table_exists or not table_exists[0]['exists']:
+            return jsonify({
+                'table_exists': False,
+                'message': 'Links table does not exist'
+            }), 404
+        
+        # Get table structure
+        structure_query = """
+        SELECT 
+            column_name, 
+            data_type,
+            is_nullable,
+            column_default
+        FROM information_schema.columns 
+        WHERE table_name = 'links'
+        ORDER BY ordinal_position;
+        """
+        structure = db.execute_query(structure_query)
+        
+        # Get row count
+        count_query = "SELECT COUNT(*) as total FROM links;"
+        count_result = db.execute_query(count_query)
+        total_rows = count_result[0]['total'] if count_result and len(count_result) > 0 else 0
+        
+        return jsonify({
+            'table_exists': True,
+            'table_name': 'links',
+            'total_rows': total_rows,
+            'structure': [dict(row) for row in structure] if structure else []
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            'error': 'Database error',
+            'message': str(e)
+        }), 500
+
 @app.route('/companies', methods=['GET'])
 def view_companies():
     """Display companies table in browser with HTML"""
