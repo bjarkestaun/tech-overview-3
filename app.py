@@ -3,6 +3,8 @@ from flask import Flask, jsonify, request, render_template_string
 from config import Config
 from db import db, init_db
 from cron_job import run_cron_job
+from update_links_db import update_links_from_companies
+from update_links_db import update_links_from_companies
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -322,6 +324,29 @@ def verify_links_table():
         return jsonify({
             'error': 'Database error',
             'message': str(e)
+        }), 500
+
+@app.route('/api/links/update', methods=['GET', 'POST'])
+def update_links():
+    """Run the update_links_from_companies function to crawl and save external links"""
+    try:
+        # Get optional limit parameter (default: 10)
+        limit = request.args.get('limit', default=10, type=int)
+        
+        # Run the update function
+        result = update_links_from_companies(limit=limit)
+        
+        return jsonify({
+            'message': 'Links update completed',
+            'result': result,
+            'timestamp': datetime.now().isoformat()
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            'error': 'Failed to update links',
+            'message': str(e),
+            'timestamp': datetime.now().isoformat()
         }), 500
 
 @app.route('/companies', methods=['GET'])
