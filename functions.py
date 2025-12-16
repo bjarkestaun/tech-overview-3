@@ -253,6 +253,6 @@ def simplify_external_links(external_links):
     
     return sorted(list(unique_domains))
 
-result = crawl_external_links("https://www.microsoft.com")
-simplified_result = simplify_external_links(result)
-print(simplified_result)
+#result = crawl_external_links("https://www.microsoft.com")
+#simplified_result = simplify_external_links(result)
+#print(simplified_result)
