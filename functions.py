@@ -171,7 +171,7 @@ def _fetch_page(url, session):
 
 def crawl_external_links(start_url, max_pages=100, max_workers=5):
     """
-    Crawl a website using BFS with concurrent requests and collect all external links.
+    Crawl a website using BFS with concurrent requests and collect external links.
 
     Uses an iterative approach with a work queue instead of recursion for better
     performance and to avoid stack overflow on deep sites.
@@ -182,12 +182,12 @@ def crawl_external_links(start_url, max_pages=100, max_workers=5):
         max_workers: Number of concurrent request threads (default: 5)
 
     Returns:
-        List of unique external URLs found across all pages
+        Sorted list of unique top-level domains found across all pages
 
     Example:
         >>> external = crawl_external_links("https://example.com")
         >>> print(external)
-        ['https://external-site.com', 'https://another-site.org', ...]
+        ['facebook.com', 'twitter.com', 'youtube.com', ...]
     """
     # Validate start URL
     try:
@@ -239,7 +239,8 @@ def crawl_external_links(start_url, max_pages=100, max_workers=5):
                 except Exception:
                     continue
 
-    return list(external_links)
+    # Convert full URLs to unique top-level domains
+    return simplify_external_links(external_links)
 
 def simplify_external_links(external_links):
     """
